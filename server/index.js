@@ -5,27 +5,26 @@ const cookieParser = require("cookie-parser");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const config = require("./server/config/key");
-
+const config = require("./config/key");
 
 const mongoose = require("mongoose");
-const connect = mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
-  app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const {Chat} = require("./server/models/Chat")
-const {auth} = require("./server/middleware/auth")
+const { Chat } = require("./models/Chat");
+const { auth } = require("./middleware/auth");
 
-app.use('/api/users', require('./server/routes/users'))
-app.use('/api/chat', require('./server/routes/chat'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/chat', require('./routes/chat'));
+
 
 const multer = require("multer");
 const fs = require("fs");
-
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -35,7 +34,7 @@ var storage = multer.diskStorage({
     cb(null, `${Date.now()}_${file.originalname}`)
   },
 })
-
+ 
 var upload = multer({ storage: storage }).single("file")
 
 app.post("/api/chat/uploadfiles", auth ,(req, res) => {
@@ -46,7 +45,6 @@ app.post("/api/chat/uploadfiles", auth ,(req, res) => {
     return res.json({ success: true, url: res.req.file.path });
   })
 });
-
 
 io.on("connection", socket => {
 
@@ -75,9 +73,12 @@ io.on("connection", socket => {
 
 })
 
+
+//use this to show the image you have in node js server to client (react js)
+//https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
 app.use('/uploads', express.static('uploads'));
 
-
+// Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
 
   // Set static folder
