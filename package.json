@@ -1,20 +1,33 @@
+
 {
-  "name": "messenger",
+  "name": "server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "heroku-postbuild": "cd client && npm install && npm run build",
-    "start": "nodemon index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MykytaBAshenko/cha.git"
+    "start": "nodemon index.js",
+
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MykytaBAshenko/cha/issues"
+  "dependencies": {
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "mongoose": "^5.4.20",
+    "multer": "^1.4.2",
+    "saslprep": "^1.0.3",
+    "socket.io": "^2.3.0",
+    "supports-color": "^7.1.0"
   },
-  "homepage": "https://github.com/MykytaBAshenko/cha#readme"
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.19.1"
+  },
+  "license": "ISC"
 }
