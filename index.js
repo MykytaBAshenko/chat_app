@@ -9,7 +9,7 @@ const config = require("./server/config/key");
 
 
 const mongoose = require("mongoose");
-const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+const connect = mongoose.connect('mongodb+srv://mbashenko:Nika26032001@cluster0-el9rx.mongodb.net/chat_app?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
