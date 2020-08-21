@@ -5,26 +5,27 @@ const cookieParser = require("cookie-parser");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const config = require("./config/key");
+const config = require("./server/config/key");
+
 
 const mongoose = require("mongoose");
 const connect = mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB Connected...'))
   .catch(err => console.log(err));
 
-app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const { Chat } = require("./models/Chat");
-const { auth } = require("./middleware/auth");
+const {Chat} = require("./server/models/Chat")
+const {auth} = require("./server/middleware/auth")
 
-app.use('/api/users', require('./routes/users'));
-app.use('/api/chat', require('./routes/chat'));
-
+app.use('/api/users', require('./server/routes/users'))
+app.use('/api/chat', require('./server/routes/chat'));
 
 const multer = require("multer");
 const fs = require("fs");
+
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -33,15 +34,8 @@ var storage = multer.diskStorage({
   filename: function (req, file, cb) {
     cb(null, `${Date.now()}_${file.originalname}`)
   },
-  // fileFilter: (req, file, cb) => {
-  //   const ext = path.extname(file.originalname)
-  //   if (ext !== '.jpg' && ext !== '.png' && ext !== '.mp4') {
-  //     return cb(res.status(400).end('only jpg, png, mp4 is allowed'), false);
-  //   }
-  //   cb(null, true)
-  // }
 })
- 
+
 var upload = multer({ storage: storage }).single("file")
 
 app.post("/api/chat/uploadfiles", auth ,(req, res) => {
@@ -52,6 +46,7 @@ app.post("/api/chat/uploadfiles", auth ,(req, res) => {
     return res.json({ success: true, url: res.req.file.path });
   })
 });
+
 
 io.on("connection", socket => {
 
@@ -80,12 +75,9 @@ io.on("connection", socket => {
 
 })
 
-
-//use this to show the image you have in node js server to client (react js)
-//https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
 app.use('/uploads', express.static('uploads'));
 
-// Serve static assets if in production
+
 if (process.env.NODE_ENV === "production") {
 
   // Set static folder

@@ -33,6 +33,12 @@ function RightMenu(props) {
   } else {
     return (
       <Menu mode={props.mode}>
+        <Menu.Item key="rules">
+          <a href="/rules">Rules</a>
+        </Menu.Item>
+        <Menu.Item key="settings">
+          <a href="/setings">Setings</a>
+        </Menu.Item>
         <Menu.Item key="logout">
           <a onClick={logoutHandler}>Logout</a>
         </Menu.Item>

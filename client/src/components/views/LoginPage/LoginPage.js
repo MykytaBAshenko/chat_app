@@ -19,18 +19,17 @@ function LoginPage(props) {
     setRememberMe(!rememberMe)
   };
 
-  const initialEmail = localStorage.getItem("rememberMe") ? localStorage.getItem("rememberMe") : '';
+  const initialname = localStorage.getItem("rememberMe") ? localStorage.getItem("rememberMe") : '';
 
   return (
     <Formik
       initialValues={{
-        email: initialEmail,
+        name: initialname,
         password: '',
       }}
       validationSchema={Yup.object().shape({
-        email: Yup.string()
-          .email('Email is invalid')
-          .required('Email is required'),
+        name: Yup.string()
+          .required('name is required'),
         password: Yup.string()
           .min(6, 'Password must be at least 6 characters')
           .required('Password is required'),
@@ -38,7 +37,7 @@ function LoginPage(props) {
       onSubmit={(values, { setSubmitting }) => {
         setTimeout(() => {
           let dataToSubmit = {
-            email: values.email,
+            name: values.name,
             password: values.password
           };
 
@@ -51,7 +50,7 @@ function LoginPage(props) {
                 } else {
                   localStorage.removeItem('rememberMe');
                 }
-                props.history.push("/");
+                props.history.push("/chat");
               } else {
                 setFormErrorMessage('Check out your Account or Password again')
               }
@@ -86,19 +85,19 @@ function LoginPage(props) {
 
               <Form.Item required>
                 <Input
-                  id="email"
+                  id="name"
                   prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  placeholder="Enter your email"
-                  type="email"
-                  value={values.email}
+                  placeholder="Enter your name"
+                  type="name"
+                  value={values.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   className={
-                    errors.email && touched.email ? 'text-input error' : 'text-input'
+                    errors.name && touched.name ? 'text-input error' : 'text-input'
                   }
                 />
-                {errors.email && touched.email && (
-                  <div className="input-feedback">{errors.email}</div>
+                {errors.name && touched.name && (
+                  <div className="input-feedback">{errors.name}</div>
                 )}
               </Form.Item>
 
